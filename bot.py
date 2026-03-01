@@ -3,38 +3,59 @@ import time
 import requests
 
 STEAM_API_KEY = os.getenv("STEAM_API_KEY")
-STEAM_ID64 = os.getenv("STEAM_ID64")          # 朋友/自己個 SteamID64
+STEAM_ID64 = os.getenv("STEAM_ID64")
 WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 
 if not STEAM_API_KEY or not STEAM_ID64 or not WEBHOOK_URL:
-    raise SystemExit("Missing env vars: STEAM_API_KEY / STEAM_ID64 / DISCORD_WEBHOOK_URL")
+    raise SystemExit("Missing environment variables")
 
 last_status = None
 
+def send_message(message):
+    try:
+        requests.post(
+            WEBHOOK_URL,
+            json={"content": message},
+            timeout=5
+        )
+    except Exception as e:
+        print("Webhook error:", e)
+
 def check_status():
     global last_status
-    url = (
-        "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/"
-        f"?key={STEAM_API_KEY}&steamids={STEAM_ID64}"
-    )
+    
+    try:
+        url = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/"
+        params = {
+            "key": STEAM_API_KEY,
+            "steamids": STEAM_ID64
+        }
 
-    r = requests.get(url, timeout=10)
-    data = r.json()
-    player = data["response"]["players"][0]
-    persona = player.get("personastate", None)
+        response = requests.get(url, params=params, timeout=5)
+        data = response.json()
 
-    if persona != last_status:
-        last_status = persona
-        if persona == 1:
-            send_message("🟢 上線了")
-        elif persona == 0:
-            send_message("⚫ 離線了")
-        else:
-            send_message(f"🟡 狀態變更：{persona}")
+        players = data.get("response", {}).get("players", [])
+        if not players:
+            print("No player data returned")
+            return
 
-def send_message(message):
-    requests.post(WEBHOOK_URL, json={"content": message}, timeout=10)
+        personastate = players[0].get("personastate")
+
+        if last_status is None:
+            last_status = personastate
+            return
+
+        if personastate != last_status:
+            last_status = personastate
+
+            if personastate == 1:
+                send_message("🟢 上線了")
+            elif personastate == 0:
+                send_message("⚫ 離線了")
+
+    except Exception as e:
+        print("Steam API error:", e)
 
 while True:
     check_status()
-    time.sleep(60)
+    time.sleep(10)
