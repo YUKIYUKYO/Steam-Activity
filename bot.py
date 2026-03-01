@@ -2,9 +2,9 @@ import os
 import time
 import requests
 
-STEAM_API_KEY = os.getenv("MTQ3Nzc3Mzc1Mzk0ND-M3OTQ5Mg.Gg-2fR.GukMoID4wYm_z1eqa154hlZ_cz27u3W-jCTH5w")
-STEAM_ID64 = os.getenv("76561198147526761")          # 朋友/自己個 SteamID64
-WEBHOOK_URL = os.getenv("https://discord.com/api/webhooks/1477781666494808114/3J-ilYjGZzbgFaIw5A3fTqplNWr75tfkI02Ri8iQsa4jtTK3ysz4u_0AgCOiTH6A6RU5")
+STEAM_API_KEY = os.getenv("STEAM_API_KEY")
+STEAM_ID64 = os.getenv("STEAM_ID64")          # 朋友/自己個 SteamID64
+WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 
 if not STEAM_API_KEY or not STEAM_ID64 or not WEBHOOK_URL:
     raise SystemExit("Missing env vars: STEAM_API_KEY / STEAM_ID64 / DISCORD_WEBHOOK_URL")
