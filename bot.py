@@ -57,7 +57,6 @@ def check_status():
 except Exception as e:
     print("Steam API error:", e)
 
-
 counter = 0
 
 while True:
