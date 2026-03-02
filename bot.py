@@ -64,7 +64,6 @@ while True:
     check_status()
     counter += 1
 
-    # 每 6 次 (= 約 60 秒) 印一次
     if counter % 6 == 0:
         print("heartbeat...", flush=True)
 
