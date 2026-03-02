@@ -1,6 +1,7 @@
 import os
 import time
 import requests
+print("Bot starting...", flush=True)
 
 STEAM_API_KEY = os.getenv("STEAM_API_KEY")
 STEAM_ID64 = os.getenv("STEAM_ID64")
