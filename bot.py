@@ -12,32 +12,20 @@ if not STEAM_API_KEY or not STEAM_ID64 or not WEBHOOK_URL:
 
 last_status = None
 
-def send_message(message):
-    try:
-        requests.post(
-            WEBHOOK_URL,
-            json={"content": message},
-            timeout=5
-        )
-    except Exception as e:
-        print("Webhook error:", e)
-
 def check_status():
     global last_status
-    
     try:
-        url = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/"
-        params = {
-            "key": STEAM_API_KEY,
-            "steamids": STEAM_ID64
-        }
+        url = (
+            "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/"
+            f"?key={STEAM_API_KEY}&steamids={STEAM_ID64}"
+        )
+        response = requests.get(url, timeout=5)
+        response.raise_for_status()
 
-        response = requests.get(url, params=params, timeout=5)
         data = response.json()
-
         players = data.get("response", {}).get("players", [])
         if not players:
-            print("No player data returned")
+            print("No player data returned", flush=True)
             return
 
         personastate = players[0].get("personastate")
@@ -48,14 +36,13 @@ def check_status():
 
         if personastate != last_status:
             last_status = personastate
-
             if personastate == 1:
                 send_message("🟢 上線了")
             elif personastate == 0:
                 send_message("⚫ 離線了")
 
-except Exception as e:
-    print("Steam API error:", e)
+    except Exception as e:
+        print("Steam API error:", e, flush=True)
 
 counter = 0
 
