@@ -54,14 +54,18 @@ def check_status():
             elif personastate == 0:
                 send_message("⚫ 離線了")
 
-    except Exception as e:
-        print("Steam API error:", e)
+except Exception as e:
+    print("Steam API error:", e)
 
-counter = 0
+
+counter = 0   # ← 呢行唔可以縮排
+
 
 while True:
     check_status()
     counter += 1
-    if counter % 6 == 0:  # 每 60 秒印一次
+
+    if counter % 6 == 0:
         print("heartbeat...", flush=True)
+
     time.sleep(10)
