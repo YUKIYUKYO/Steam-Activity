@@ -64,7 +64,7 @@ while True:
     check_status()
     counter += 1
 
-    if counter % 6 == 0:
+    if counter % 6 == 0:  # 每 60 秒 print 一次
         print("heartbeat...", flush=True)
 
-    time.sleep(10)
+    time.sleep(10)  # 10 秒 check 一次
