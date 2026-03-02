@@ -57,8 +57,11 @@ def check_status():
     except Exception as e:
         print("Steam API error:", e)
 
+counter = 0
+
 while True:
     check_status()
-    print("heartbeat...", flush=True)
-    time.sleep(60)
+    counter += 1
+    if counter % 6 == 0:  # 每 60 秒印一次
+        print("heartbeat...", flush=True)
     time.sleep(10)
