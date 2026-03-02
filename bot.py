@@ -58,13 +58,13 @@ except Exception as e:
     print("Steam API error:", e)
 
 
-counter = 0   # ← 呢行唔可以縮排
-
+counter = 0
 
 while True:
-    check_status()
+    check_status()          # 仍然每 10 秒 check 一次
     counter += 1
 
+    # 每 6 次（= 約 60 秒）先 print 一次 heartbeat
     if counter % 6 == 0:
         print("heartbeat...", flush=True)
 
