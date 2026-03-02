@@ -59,4 +59,6 @@ def check_status():
 
 while True:
     check_status()
+    print("heartbeat...", flush=True)
+    time.sleep(60)
     time.sleep(10)
